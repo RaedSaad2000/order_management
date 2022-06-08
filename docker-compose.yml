@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    environment:
+      - "MYSQL_DATABASE=products"
+      - "MYSQL_USER=root"
+      - "MYSQL_PASSWORD=root"
+      - "MYSQL_ROOT_PASSWORD=root"
+    ports:
+      - "127.0.0.1:3307:3306"
+    volumes:
+      - C:/Users/raeds/OneDrive/Desktop/order-management/docker data/mysql:/var/lib/mysql
+  app:
+    image: 'order_management_repo:latest'
+    build: .
+    container_name: order_management_repo
+    depends_on:
+      - mysql
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/order_management?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SERVER_PORT=9091
+    ports:
+      - "127.0.0.1:9092:9091"
